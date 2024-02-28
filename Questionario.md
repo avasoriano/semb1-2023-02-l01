@@ -27,15 +27,28 @@ R: As dependências de um target em um Makefile são especificadas para indicar 
 #### (e) O que são as regras do **Makefile**, qual a diferença entre regras implícitas e explícitas?
 R: As regras são instruções que especificam a automatização para compilar e vincular os arquivos. As regras explícitas informam ao make quais arquivos dependem de outros arquivos e os comandos necessários para compilar um arquivo específico. Já as regras implícitas são semelhantes às explícitas, mas indicam os comandos a serem executados com base nas extensões dos arquivos, o make usa essas regras para determinar quais comandos executar automaticamente.
 
+
 ## 4. Sobre a arquitetura **ARM Cortex-M** responda:
 
 ### (a) Explique o conjunto de instruções ***Thumb*** e suas principais vantagens na arquitetura ARM. Como o conjunto de instruções ***Thumb*** opera em conjunto com o conjunto de instruções ARM?
+R: O conjunto Thumb (16 bytes - tamanho reduzido) é um subconjunto do conjunto de instrções ARM, projetado para otimizar o tamanho do código e melhorar a densidade de instruções, ou seja, melhora o desempenho de sistemas embarcados. Durante a execução, as instruções Thumb de 16 bits são descomprimidas em instruções ARM completas de 32 bits em tempo real, sem perda de desempenho, isso permite que o mesmo código-fonte contenha instruções Thumb e ARM, otimizando o tamanho e o desempenho, permitindo que o processador execute ambos. 
 
 ### (b) Explique as diferenças entre as arquiteturas ***ARM Load/Store*** e ***Register/Register***.
+R: Na arquitetura ARM Load/Store todas as operações lógicas e aritméticas são executadas entre registradores primeiro para que esses dados sejam executados na memória, ou seja, apenas instruções de carga (load - leitura) e armazenamento (store - escrita) podem acessar a memória. Na arquitetura Register/Register todas as operações são executadas diretamente entre registradores, ou seja, as intruções já operam nos próprios registradores da CPU sem a necessidade de acessar a memória, com isso, torna essa arquitetura mais eficiente, principalmente em termos de desempenho e em operações que envolvem muitos dados.
 
 ### (c) Os processadores **ARM Cortex-M** oferecem diversos recursos que podem ser explorados por sistemas baseados em **RTOS** (***Real Time Operating Systems***). Por exemplo, a separação da execução do código em níveis de acesso e diferentes modos de operação. Explique detalhadamente como funciona os níveis de acesso de execução de código e os modos de operação nos processadores **ARM Cortex-M**.
+R: Os processadores ARM Cortex-M operam em vários níveis, os dois modos principais de acesso são: os privilegiados e os não privilegiados. No privilegiado (PAL) o código tem total acesso aos recursos do processador e aos registradores restritos, isso é usado principalmente pelo sistema operacional e pelo código de baixo nível que precisa de acesso direto ao hardware. No modo não privilegiado (NPAL) o código não tem acesso aos registradores de forma limitada garantindo a segurança do sistema.
+O processador ARM Cortex-M3 possui dois modos de operação (determinam como o processador responde às interrupções e eventos do sistema) principais: o Modo de Operação Thread e o Modo de Operação Handler. No primeiro modo, permite a CPU executar o código normal do programa e rodar nos dois níveis de acesso (PAL e NPAL). Já no segundo modo, sempre vai rodar em PAL, é usado para tratamento de interrupções e exceções.
 
 ### (d) Explique como os processadores ARM tratam as exceções e as interrupções. Quais são os diferentes tipos de exceção e como elas são priorizadas? Descreva a estratégia de **group priority** e **sub-priority** presente nesse processo.
+R: Exceções e interrupções são eventos inesperados que ocorrem durante a execução do programa e interrompem o fluxo normal de execução da CPU requer uma resposta imediata do processador. As exceções são eventos gerados pelo próprio processador, enquanto as interrupções são eventos causados por dispositivos externos. Isso pode incluir eventos como uma solicitação de entrada/sáida, erros de execução ou condições de erro.
+Tipos de Exceções:
+- Exceções de Acesso à Memória (Abort): geradas quando ocorre um acesso inválido à memória, como desalinhamento de palavra ou falta de página.
+- Exceções de Instrução Indefinida: disparadas quando o processador tenta executar uma instrução inválida.
+- Exceções de Software (SWI): instruções específicas que podem gerar uma inconformidade, como uma divisão por zero.
+- Exceções de Instrução Inválida: ocorrem quando uma instrução não contém um código válido de instrução.
+Group Priority (Prioridade do Grupo): divide as interrupções em grupos com diferentes níveis de prioridade.
+Sub Priority (Subprioridade): usada para resolver disputas dentro do mesmo grupo de prioridade, ou seja, dentro de cada grupo as interrupções tem seus subníveis de prioridades.
 
 ### (e) Qual a diferença entre os registradores **CPSR** (***Current Program Status Register***) e **SPSR** (***Saved Program Status Register***)?
 
