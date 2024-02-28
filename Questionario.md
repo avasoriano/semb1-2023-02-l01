@@ -38,6 +38,7 @@ R: Na arquitetura ARM Load/Store todas as operações lógicas e aritméticas s�
 
 ### (c) Os processadores **ARM Cortex-M** oferecem diversos recursos que podem ser explorados por sistemas baseados em **RTOS** (***Real Time Operating Systems***). Por exemplo, a separação da execução do código em níveis de acesso e diferentes modos de operação. Explique detalhadamente como funciona os níveis de acesso de execução de código e os modos de operação nos processadores **ARM Cortex-M**.
 R: Os processadores ARM Cortex-M operam em vários níveis, os dois modos principais de acesso são: os privilegiados e os não privilegiados. No privilegiado (PAL) o código tem total acesso aos recursos do processador e aos registradores restritos, isso é usado principalmente pelo sistema operacional e pelo código de baixo nível que precisa de acesso direto ao hardware. No modo não privilegiado (NPAL) o código não tem acesso aos registradores de forma limitada garantindo a segurança do sistema.
+
 O processador ARM Cortex-M3 possui dois modos de operação (determinam como o processador responde às interrupções e eventos do sistema) principais: o Modo de Operação Thread e o Modo de Operação Handler. No primeiro modo, permite a CPU executar o código normal do programa e rodar nos dois níveis de acesso (PAL e NPAL). Já no segundo modo, sempre vai rodar em PAL, é usado para tratamento de interrupções e exceções.
 
 ### (d) Explique como os processadores ARM tratam as exceções e as interrupções. Quais são os diferentes tipos de exceção e como elas são priorizadas? Descreva a estratégia de **group priority** e **sub-priority** presente nesse processo.
@@ -47,22 +48,29 @@ Tipos de Exceções:
 - Exceções de Instrução Indefinida: disparadas quando o processador tenta executar uma instrução inválida.
 - Exceções de Software (SWI): instruções específicas que podem gerar uma inconformidade, como uma divisão por zero.
 - Exceções de Instrução Inválida: ocorrem quando uma instrução não contém um código válido de instrução.
-Group Priority (Prioridade do Grupo): divide as interrupções em grupos com diferentes níveis de prioridade.
-Sub Priority (Subprioridade): usada para resolver disputas dentro do mesmo grupo de prioridade, ou seja, dentro de cada grupo as interrupções tem seus subníveis de prioridades.
+
+Group Priority (Prioridade do Grupo): divide as interrupções em grupos com diferentes níveis de prioridade. Sub Priority (Subprioridade): usada para resolver disputas dentro do mesmo grupo de prioridade, ou seja, dentro de cada grupo as interrupções tem seus subníveis de prioridades.
 
 ### (e) Qual a diferença entre os registradores **CPSR** (***Current Program Status Register***) e **SPSR** (***Saved Program Status Register***)?
+R: o CPSR (ou PSR) é o registro que mantém o estado atual do processador, enquanto o SPSR (ou PSR) armazena temporariamente o estado do processador durante exceções e interrupções.
 
 ### (f) Qual a finalidade do **LR** (***Link Register***)?
+R: O LR armazena o endereço de retorno para onde o fluxo de execução deve voltar após a conclusão de uma chamada de sub-rotina. Isso é quando uma função é chamada, o endereço de retorno (geralmente o endereço da próxima instrução após a chamada) é armazenado no LR, permitindo que a função retorne ao ponto de origem após sua execução.
 
 ### (g) Qual o propósito do Program Status Register (PSR) nos processadores ARM?
+R: O Program Status Register (PSR), também conhecido como CPSR (Current Program Status Register) é utilizado para armazenar informações cruciais sobre o estado atual do processador. Assim, ele reflete o resultado de operações lógicas e aritméticas, controla interrupções e gerencia o modo de operação do processador.
 
 ### (h) O que é a tabela de vetores de interrupção?
+R: O vetor de interrupções é uma tabela de endereços de memória que aponta para as rotinas de tratamento de interrupção. Quando uma interrupção é gerada, o processador salva seu estado atual e começa a executar o tratamento de interrupção apontado pelo vetor. Isso garante que nenhuma das tarefas executadas pelo sistema operacional entre em conflito.
 
 ### (i) Qual a finalidade do NVIC (**Nested Vectored Interrupt Controller**) nos microcontroladores ARM e como ele pode ser utilizado em aplicações de tempo real?
+R: O Nested Vectored Interrupt Controller (NVIC) é um componente periférico essencial nos processadores ARM Cortex-M e desempenha um papel crucial no tratamento de interrupções (no gerenciamento delas). Assim, ele permite que o processador lide com várias interrupções de maneira eficiente e priorize eventos importantes. Em sistemas de tempo real, o NVIC é crucial para garantir que as interrupções sejam tratadas de forma previsível e rápida. Aplicações de tempo real como controle de dispositivos, sistemas embarcados e automação industrial, dependem do NVIC para responder a eventos externos sem atrasos excessivos. 
 
 ### (j) Em modo de execução normal, o Cortex-M pode fazer uma chamada de função usando a instrução **BL**, que muda o **PC** para o endereço de destino e salva o ponto de execução atual no registador **LR**. Ao final da função, é possível recuperar esse contexto usando uma instrução **BX LR**, por exemplo, que atualiza o **PC** para o ponto anterior. No entanto, quando acontece uma interrupção, o **LR** é preenchido com um valor completamente  diferente,  chamado  de  **EXC_RETURN**.  Explique  o  funcionamento  desse  mecanismo  e especifique como o **Cortex-M** consegue fazer o retorno da interrupção. 
+R: o EXC_RETURN é um valor especial usado pelo Cortex-M para gerenciar o fluxo de exceções e garantir que o contexto seja restaurado adequadamente após o tratamento de interrupções. Quando a rotina de tratamento de exceção (como um IRQ handler) está prestes a retornar, o processador usa o valor do EXC_RETURN para restaurar o contexto correto. O processador verifica o EXC_RETURN para determinar se deve voltar ao modo Thread ou Handler, qual pilha usar (MSP ou PSP) e outras configurações específicas.
 
 ### (k) Qual  a  diferença  no  salvamento  de  contexto,  durante  a  chegada  de  uma  interrupção,  entre  os processadores Cortex-M3 e Cortex M4F (com ponto flutuante)? Descreva em termos de tempo e também de uso da pilha. Explique também o que é ***lazy stack*** e como ele é configurado. 
+R: As diferenças no salvamento de contexto durante a chegada de uma interrupção entre os dois processadores são: no tempo de salvamento de contexto, no uso da pilha e no Lazy Stack. O Cortex-M4F é mais eficiente em termos de tempo de salvamento de contexto durante interrupções, isso ocorre porque o Cortex-M4F possui registradores adicionais para armazenar os estados de ponto flutuante (FPU), enquanto o Cortex-M3 não possui suporte nativo a ponto flutuante. Em relação ao uso da pilha, ambos os processadores utilizam dela para salvar o contexto durante uma interrupção, porém o Cortex-M4F tem a vantagem de salvar os registradores de ponto flutuante em uma área separada da pilha, reduzindo o impacto no uso geral da pilha, enquanto o Cortex-M3, todos os registradores (incluindo ponto flutuante) são salvos na mesma pilha. O lazy stack refere-se à estratégia de salvar apenas os registradores necessários durante uma interrupção. O lazy stack é configurado por meio de opções de configuração específicas no compilador
 
 
 ## Referências
