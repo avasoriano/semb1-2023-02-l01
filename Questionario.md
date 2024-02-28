@@ -1,21 +1,31 @@
 # Questionário Sistemas Embarcados I
 
 ## 1. Explique brevemente o que é compilação cruzada (***cross-compiling***) e para que ela serve.
-R: 
+R: O cross-compiling é o processo de criação de um código executável para uma diferente plataforma daquela em que o compilador está sendo executado, ou seja, assim ela serve para executar o código em outro sistena operacional ou em outra arquitetura. Por exemplo, compilar para Windows a partir do Linux ou para Arm64 a partir do x64.
+
 
 ## 2. O que é um código de inicialização ou ***startup*** e qual sua finalidade?
+R: O código de inicialização é o ponto de partida crítico para o sistema operacional (antes do main). Suas principais funções incluem: configurar a memória, iniciar as variáveis globais (localizar e carregar o sistema operacional), configuração do processador e preparação para executar o código principal do programa. 
+
 
 ## 3. Sobre o utilitário **make** e o arquivo **Makefile responda**:
 
 #### (a) Explique com suas palavras o que é e para que serve o **Makefile**.
+R: É um arquivo texto que contém regras usado para automatizar a compilação e execução de programas escritos em C/C++, ou seja, serve para descrever como os arquivos-fonte devem ser compilados e vinculados para criar um código executável / programa. 
 
 #### (b) Descreva brevemente o processo realizado pelo utilitário **make** para compilar um programa.
+R: O utilitário make vai analisar todo o código descrito no Makefile e compila os arquivos-fontes necessários para criar um arquivo objeto executável. 
 
 #### (c) Qual é a sintaxe utilizada para criar um novo **target**?
+R: Target são as dependências, ou seja, refere-se ao resultado que se quer obter ao executar uma regra específica. Por exemplo, se você quisesse criar um alvo chamado “compilar” que depende do arquivo-fonte main.c, você poderia escrever o seguinte no seu Makefile:
+compilar: main.c
+    gcc -o meu_programa main.c
 
 #### (d) Como são definidas as dependências de um **target**, para que elas são utilizadas?
+R: As dependências de um target em um Makefile são especificadas para indicar quais arquivos ou outros alvos devem estar atualizados antes que o alvo em questão possa ser construído.
 
 #### (e) O que são as regras do **Makefile**, qual a diferença entre regras implícitas e explícitas?
+R: As regras são instruções que especificam a automatização para compilar e vincular os arquivos. As regras explícitas informam ao make quais arquivos dependem de outros arquivos e os comandos necessários para compilar um arquivo específico. Já as regras implícitas são semelhantes às explícitas, mas indicam os comandos a serem executados com base nas extensões dos arquivos, o make usa essas regras para determinar quais comandos executar automaticamente.
 
 ## 4. Sobre a arquitetura **ARM Cortex-M** responda:
 
