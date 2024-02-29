@@ -129,7 +129,7 @@ _attribute_((section(".isr_vector"))) pFunction __isr_vectors[] = {
     pendsv_handler,
     systick_handler,
 
-    // Vetores de interrupção específicos do STM32F411
+// Vetores de interrupção específicos do STM32F411
     wwdg_handler,
     pvd_handler,
     tamp_stamp_handler,
