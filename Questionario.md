@@ -1,5 +1,7 @@
 # Questionário Sistemas Embarcados I
 
+# Ava Soriano Rezende - 11921EBI011
+
 ## 1. Explique brevemente o que é compilação cruzada (***cross-compiling***) e para que ela serve.
 R: O cross-compiling é o processo de criação de um código executável para uma diferente plataforma daquela em que o compilador está sendo executado, ou seja, assim ela serve para executar o código em outro sistena operacional ou em outra arquitetura. Por exemplo, compilar para Windows a partir do Linux ou para Arm64 a partir do x64.
 
